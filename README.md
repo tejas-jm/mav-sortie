@@ -76,7 +76,8 @@ uv run phase_0_enhanced.py
 
 Workflow -
  
-```mermaid 
+```mermaid
+%%{init: { 'theme': 'base', 'themeVariables': { 'primaryColor': '#ffffff', 'lineColor': '#000000', 'textColor': '#000000', 'mainBkg': '#ffffff', 'nodeBorder': '#000000', 'actorBorder': '#000000', 'actorBkg': '#ffffff', 'actorTextColor': '#000000', 'actorLineColor': '#000000', 'signalColor': '#000000', 'signalTextColor': '#000000', 'labelBoxBorderColor': '#000000', 'labelBoxBkgColor': '#ffffff', 'labelTextColor': '#000000', 'loopTextColor': '#000000', 'noteTextColor': '#000000', 'noteBkgColor': '#fff5ad' } } }%%
 sequenceDiagram
     autonumber
     
@@ -87,7 +88,7 @@ sequenceDiagram
     participant QGC as QGroundControl (Mac)
     participant MAVSDK as Python Script (Mac)
 
-    rect rgb(0, 248, 255)
+    rect rgb(240, 248, 255)
     Note over User, PiTerm: Phase 1: Environment Setup
     User->>MacTerm: ssh commander@dronepi.local
     activate MacTerm
@@ -99,7 +100,7 @@ sequenceDiagram
     User->>PiTerm: cd PX4-Autopilot
     end
 
-    rect rgb(255, 250, 0)
+    rect rgb(255, 250, 255)
     Note over User, QGC: Phase 2: Simulation & Networking
     User->>PiTerm: HEADLESS=1 make px4_sitl jmavsim
     PiTerm->>PX4: Spawn Headless Simulator
@@ -115,7 +116,7 @@ sequenceDiagram
     PX4-->>User: Dedicated UDP stream routing to Mac (Port 14555)
     end
 
-    rect rgb(120, 250, 120)
+    rect rgb(255, 250, 255)
     Note over User, MAVSDK: Phase 3: Mission Execution (Closed-Loop)
     User->>MacTerm: uv run phase_0_enhanced.py
     MacTerm->>MAVSDK: Spawn Python Process
