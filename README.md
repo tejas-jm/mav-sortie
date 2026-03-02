@@ -87,7 +87,7 @@ sequenceDiagram
     participant QGC as QGroundControl (Mac)
     participant MAVSDK as Python Script (Mac)
 
-    rect rgb(240, 248, 255)
+    rect rgb(0, 248, 255)
     Note over User, PiTerm: Phase 1: Environment Setup
     User->>MacTerm: ssh commander@dronepi.local
     activate MacTerm
@@ -99,7 +99,7 @@ sequenceDiagram
     User->>PiTerm: cd PX4-Autopilot
     end
 
-    rect rgb(255, 250, 240)
+    rect rgb(255, 250, 0)
     Note over User, QGC: Phase 2: Simulation & Networking
     User->>PiTerm: HEADLESS=1 make px4_sitl jmavsim
     PiTerm->>PX4: Spawn Headless Simulator
@@ -115,7 +115,7 @@ sequenceDiagram
     PX4-->>User: Dedicated UDP stream routing to Mac (Port 14555)
     end
 
-    rect rgb(240, 255, 240)
+    rect rgb(120, 250, 120)
     Note over User, MAVSDK: Phase 3: Mission Execution (Closed-Loop)
     User->>MacTerm: uv run phase_0_enhanced.py
     MacTerm->>MAVSDK: Spawn Python Process
