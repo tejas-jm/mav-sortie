@@ -77,6 +77,7 @@ uv run phase_0_enhanced.py
 Workflow -
  
 ```mermaid
+%%{init: { 'theme': 'base', 'themeVariables': { 'textColor': '#000000', 'actorTextColor': '#000000', 'signalTextColor': '#000000', 'noteTextColor': '#000000', 'labelTextColor': '#000000', 'loopTextColor': '#000000', 'sectionTextColor': '#000000', 'activationBorderColor': '#000000' } } }%%
 sequenceDiagram
     autonumber
     
