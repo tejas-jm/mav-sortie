@@ -77,64 +77,63 @@ uv run phase_0_enhanced.py
 Workflow -
  
 ```mermaid
-%%{init: { 'theme': 'base', 'themeVariables': { 'primaryColor': '#ffffff', 'lineColor': '#FFFFFF', 'textColor': '#000000', 'mainBkg': '#ffffff', 'nodeBorder': '#000000', 'actorBorder': '#000000', 'actorBkg': '#ffffff', 'actorTextColor': '#000000', 'actorLineColor': '#000000', 'signalColor': '#000000', 'signalTextColor': '#000000', 'labelBoxBorderColor': '#000000', 'labelBoxBkgColor': '#ffffff', 'labelTextColor': '#000000', 'loopTextColor': '#000000', 'noteTextColor': '#000000', 'noteBkgColor': '#fff5ad' } } }%%
 sequenceDiagram
     autonumber
     
-    actor User as User (Mac)
-    participant MacTerm as Mac Terminal
-    participant PiTerm as Pi Terminal (SSH)
+    %% Use Actor/Participant aliases for cleaner logic
+    actor U as User (Mac)
+    participant MT as Mac Terminal
+    participant PT as Pi Terminal (SSH)
     participant PX4 as PX4 SITL (Pi)
     participant QGC as QGroundControl (Mac)
-    participant MAVSDK as Python Script (Mac)
+    participant PY as MAVSDK Script (Mac)
 
-    rect rgb(240, 248, 255)
-    Note over User, PiTerm: Phase 1: Environment Setup
-    User->>MacTerm: ssh commander@dronepi.local
-    activate MacTerm
-    MacTerm->>PiTerm: Establish SSH Connection
-    activate PiTerm
-    PiTerm-->>MacTerm: Connection Established
-    User->>PiTerm: sudo iw reg set IN
-    PiTerm-->>User: Wi-Fi Region Updated (India)
-    User->>PiTerm: cd PX4-Autopilot
+    %% Phase 1
+    rect rgb(230, 240, 255)
+    Note over U, PT: Phase 1: Environment Setup
+    U->>MT: ssh commander@dronepi.local
+    activate MT
+    MT->>PT: Establish SSH Connection
+    activate PT
+    PT-->>MT: Connection Established
+    U->>PT: sudo iw reg set IN
+    PT-->>U: Wi-Fi Region Updated (India)
     end
 
-    rect rgb(255, 250, 255)
-    Note over User, QGC: Phase 2: Simulation & Networking
-    User->>PiTerm: HEADLESS=1 make px4_sitl jmavsim
-    PiTerm->>PX4: Spawn Headless Simulator
+    %% Phase 2
+    rect rgb(240, 240, 240)
+    Note over U, QGC: Phase 2: Simulation & Networking
+    U->>PT: HEADLESS=1 make px4_sitl jmavsim
     activate PX4
-    PX4-->>PiTerm: pxh> prompt ready
-    Note right of PX4: Default Broadcast active on 14550
-    User->>QGC: Open Application
+    PT->>PX4: Spawn Headless Simulator
+    PX4-->>PT: pxh> prompt ready
+    Note right of PX4: Broadcast active on 14550
+    U->>QGC: Open Application
     activate QGC
-    PX4->>QGC: MAVLink auto-connects (Port 14550)
-    User->>PiTerm: mavlink start -u 14581 -o 14555 -t <MAC_IP> -m onboard
-    PiTerm->>PX4: Create private MAVLink stream
-    Note right of PX4: Secondary stream bypasses localhost
-    PX4-->>User: Dedicated UDP stream routing to Mac (Port 14555)
+    PX4->>QGC: MAVLink auto-connects (14550)
+    U->>PT: mavlink start -u 14581 -o 14555 -t <MAC_IP>
+    PT->>PX4: Create private MAVLink stream
+    PX4-->>U: UDP stream to Mac (Port 14555)
     end
 
-    rect rgb(255, 250, 255)
-    Note over User, MAVSDK: Phase 3: Mission Execution (Closed-Loop)
-    User->>MacTerm: uv run phase_0_enhanced.py
-    MacTerm->>MAVSDK: Spawn Python Process
-    activate MAVSDK
-    MAVSDK->>PX4: Connect via udpin://0.0.0.0:14555
-    PX4-->>MAVSDK: Handshake & Health Telemetry Stream
-    Note left of PX4: Waiting for is_armable & GPS Lock
-    MAVSDK->>PX4: Command: Arm & Takeoff to Max Altitude
-    PX4-->>MAVSDK: Altitude Telemetry (climbing)
-    MAVSDK->>PX4: Command: Hold (at threshold)
-    Note right of MAVSDK: Kinematic overshoot occurs
-    MAVSDK->>PX4: Command: Land
-    PX4-->>MAVSDK: Disarm detected
-    MAVSDK-->>MacTerm: Clean Exit
-    deactivate MAVSDK
+    %% Phase 3
+    rect rgb(230, 255, 230)
+    Note over U, PY: Phase 3: Mission Execution
+    U->>MT: uv run phase_0_enhanced.py
+    activate PY
+    MT->>PY: Spawn Python Process
+    PY->>PX4: Connect via udpin://0.0.0.0:14555
+    PX4-->>PY: Handshake & Telemetry
+    Note left of PX4: Wait for Armable/GPS
+    PY->>PX4: Command: Arm & Takeoff
+    PX4-->>PY: Altitude Telemetry
+    PY->>PX4: Command: Land
+    PX4-->>PY: Disarm detected
+    PY-->>MT: Clean Exit
+    deactivate PY
     deactivate QGC
     deactivate PX4
-    deactivate PiTerm
-    deactivate MacTerm
+    deactivate PT
+    deactivate MT
     end
 ```
