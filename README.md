@@ -77,7 +77,7 @@ uv run phase_0_enhanced.py
 Workflow -
  
 ```mermaid
-%%{init: { 'theme': 'base', 'themeVariables': { 'primaryColor': '#ffffff', 'lineColor': '#000000', 'textColor': '#000000', 'mainBkg': '#ffffff', 'nodeBorder': '#000000', 'actorBorder': '#000000', 'actorBkg': '#ffffff', 'actorTextColor': '#000000', 'actorLineColor': '#000000', 'signalColor': '#000000', 'signalTextColor': '#000000', 'labelBoxBorderColor': '#000000', 'labelBoxBkgColor': '#ffffff', 'labelTextColor': '#000000', 'loopTextColor': '#000000', 'noteTextColor': '#000000', 'noteBkgColor': '#fff5ad' } } }%%
+%%{init: { 'theme': 'base', 'themeVariables': { 'primaryColor': '#ffffff', 'lineColor': '#FFFFFF', 'textColor': '#000000', 'mainBkg': '#ffffff', 'nodeBorder': '#000000', 'actorBorder': '#000000', 'actorBkg': '#ffffff', 'actorTextColor': '#000000', 'actorLineColor': '#000000', 'signalColor': '#000000', 'signalTextColor': '#000000', 'labelBoxBorderColor': '#000000', 'labelBoxBkgColor': '#ffffff', 'labelTextColor': '#000000', 'loopTextColor': '#000000', 'noteTextColor': '#000000', 'noteBkgColor': '#fff5ad' } } }%%
 sequenceDiagram
     autonumber
     
